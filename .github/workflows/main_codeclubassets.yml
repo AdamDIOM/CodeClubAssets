@@ -3,6 +3,9 @@
 
 name: Build and deploy ASP.Net Core app to Azure Web App - CodeClubAssets
 
+env:
+  SECRET_DB: ${{ secrets.SECRET_DB }}
+  
 on:
   push:
     branches:
