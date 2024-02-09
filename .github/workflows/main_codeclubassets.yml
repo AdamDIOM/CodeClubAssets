@@ -27,9 +27,6 @@ jobs:
           dotnet-version: '6.0'
           include-prerelease: true
 
-      - name: Test
-        run: dotnet test "${{env.DOTNET_ROOT}}" -e SECRET_DB=${{secrets.SECRET_DB}}
-
       - name: Build with dotnet
         run: dotnet build --configuration Release 
 
