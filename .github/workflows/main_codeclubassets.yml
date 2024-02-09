@@ -3,6 +3,8 @@
 
 name: Build and deploy ASP.Net Core app to Azure Web App - CodeClubAssets
 
+env:
+  SECRET_DB: ${{ secrets.SECRET_DB }}
   
 on:
   push:
@@ -13,8 +15,7 @@ on:
 jobs:
   build:
   
-    env:
-      SECRET_DB: ${{ secrets.SECRET_DB }}
+    
     runs-on: windows-latest
 
     steps:
@@ -26,8 +27,11 @@ jobs:
           dotnet-version: '6.0'
           include-prerelease: true
 
+      - name: Test
+        run: dotnet test "${{env.DOTNET_ROOT}}" -e SECRET_DB=${{secrets.SECRET_DB}}
+
       - name: Build with dotnet
-        run: dotnet build --configuration Release
+        run: dotnet build --configuration Release 
 
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
