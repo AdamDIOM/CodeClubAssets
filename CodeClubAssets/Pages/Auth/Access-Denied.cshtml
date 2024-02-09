@@ -1,0 +1,9 @@
+﻿@page
+@model CodeClubAssets.Pages.Auth.Access_DeniedModel
+@{
+	ViewData["Title"] = "Access Denied";
+}
+
+<h2>Access Denied</h2>
+<h3>You do not have access to this page.</h3>
+<form asp-page="/Auth/Login" method="post"><button class="logout-button nav-link text-dark btn btn-link btn-danger" type="submit">Switch Account</button></form>

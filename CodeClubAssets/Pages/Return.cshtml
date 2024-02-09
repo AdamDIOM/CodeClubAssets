@@ -1,0 +1,27 @@
+﻿@page
+@model CodeClubAssets.Pages.ReturnModel
+@{
+    ViewData["Title"] = "Return";
+}
+
+<h1>Item Return</h1>
+<hr />
+        
+<form method="post">
+    <div>
+        <dl class="row">
+            <dt class="col-sm-2">
+                Item
+            </dt>
+            <dd class="col-sm-10">
+                <select asp-for="LoanID">
+                    @foreach(var item in Model.Loans.Where(l => !l.History))
+                    {
+                        <option value="@item.ID">@item.AssetID - @item.MemberID</option>
+                    }
+                </select>
+            </dd>
+        </dl>
+    </div>
+    <input type="submit" value="Return" class="btn btn-success">
+</form>
