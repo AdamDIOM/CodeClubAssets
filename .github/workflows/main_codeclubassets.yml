@@ -3,8 +3,6 @@
 
 name: Build and deploy ASP.Net Core app to Azure Web App - CodeClubAssets
 
-env:
-  SECRET_DB: ${{ secrets.SECRET_DB }}
   
 on:
   push:
@@ -14,6 +12,9 @@ on:
 
 jobs:
   build:
+  
+    env:
+      SECRET_DB: ${{ secrets.SECRET_DB }}
     runs-on: windows-latest
 
     steps:
