@@ -31,6 +31,14 @@ jobs:
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
+      - name: App Settings Variable Substitution
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: '${{env.DOTNET_ROOT}}/myapp/appsettings.json'
+        env:
+          ConnectionStrings.CodeClubAssetsContext: ${{ secrets.SECRET_DB }}
+
+
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
@@ -66,9 +74,4 @@ jobs:
           app-name: 'CodeClubAssets'
           slot-name: 'Production'
           package: .
-          app-settings-json: >
-            {
-              "ConnectionStrings:CodeClubAssetsContext": "${{ secrets.SECRET_DB }}"
-            }
-        env:
-          SECRET_DB: ${{ secrets.SECRET_DB }}
+        
