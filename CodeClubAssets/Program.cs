@@ -13,8 +13,8 @@ IConfiguration config = new ConfigurationBuilder()
 builder.Services.AddRazorPages();
 builder.Configuration.AddEnvironmentVariables();
 builder.Services.AddDbContext<CodeClubAssetsContext>(options =>
-    options.UseSqlServer(config["SECRET_DB"] ?? throw new InvalidOperationException("Connection string not found"))
-    //options.UseSqlServer(builder.Configuration.GetConnectionString("CodeClubAssetsContext") ?? throw new InvalidOperationException("Connection string 'CodeClubAssetsContext' not found."))
+    //options.UseSqlServer(config["SECRET_DB"] ?? throw new InvalidOperationException("Connection string not found"))
+    options.UseSqlServer(builder.Configuration.GetConnectionString("CodeClubAssetsContext") ?? throw new InvalidOperationException("Connection string 'CodeClubAssetsContext' not found."))
     );
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
