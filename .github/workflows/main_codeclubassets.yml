@@ -66,5 +66,9 @@ jobs:
           app-name: 'CodeClubAssets'
           slot-name: 'Production'
           package: .
+          app-settings-json: >
+            {
+              "ConnectionStrings:CodeClubAssetsContext": "${{ secrets.SECRET_DB }}"
+            }
         env:
           SECRET_DB: ${{ secrets.SECRET_DB }}
