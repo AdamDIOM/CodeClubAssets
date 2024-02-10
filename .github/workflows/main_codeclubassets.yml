@@ -24,8 +24,7 @@ jobs:
           dotnet-version: '6.0'
           include-prerelease: true
 
-        env:
-          SECRET_DB: ${{ secrets.SECRET_DB }}
+       
       - name: Build with dotnet
         run: dotnet build --configuration Release 
 
@@ -46,7 +45,8 @@ jobs:
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
       id-token: write #This is required for requesting the JWT
-
+    env:
+      SECRET_DB: ${{ secrets.SECRET_DB }}
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
