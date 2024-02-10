@@ -45,8 +45,7 @@ jobs:
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
       id-token: write #This is required for requesting the JWT
-    env:
-      SECRET_DB: ${{ secrets.SECRET_DB }}
+    
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
@@ -67,4 +66,5 @@ jobs:
           app-name: 'CodeClubAssets'
           slot-name: 'Production'
           package: .
-          
+        env:
+          SECRET_DB: ${{ secrets.SECRET_DB }}
