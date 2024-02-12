@@ -23,6 +23,11 @@ namespace CodeClubAssets.Pages.Management
         [BindProperty]
         public Item Item { get; set; } = default!;
 
+        public IList<Item> Items { get; set; } = default!;
+
+        [BindProperty]
+        public string originalLocation { get; set; } = default!;
+
         public async Task<IActionResult> OnGetAsync(string id)
         {
             if (id == null || _context.Item == null)
@@ -35,6 +40,7 @@ namespace CodeClubAssets.Pages.Management
             {
                 return NotFound();
             }
+            originalLocation = item.Location;
             Item = item;
             return Page();
         }
@@ -49,6 +55,24 @@ namespace CodeClubAssets.Pages.Management
             }
 
             _context.Attach(Item).State = EntityState.Modified;
+
+            if (_context.Item != null)
+            {
+                Items = await _context.Item.ToListAsync();
+            }
+            
+            if(Item != null && Item.Location != null && originalLocation != null && originalLocation != "")
+            {
+                foreach (var i in Items)
+                {
+                    if (i == Item) continue;
+                    if(i.ParentID == Item.ID && i.Location == originalLocation)
+                    {
+                        i.Location = Item.Location;
+                        _context.Attach(i).State = EntityState.Modified;
+                    }
+                }
+            }
 
             try
             {
