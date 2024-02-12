@@ -9,6 +9,8 @@ IConfiguration config = new ConfigurationBuilder()
     .AddUserSecrets<Program>()
     .Build();
 string dbConnStr = "";
+string msID = "";
+string msSec = "";
 try
 {
     dbConnStr = config["SECRET_DB"];
@@ -17,6 +19,24 @@ try
 catch
 {
     dbConnStr = builder.Configuration.GetConnectionString("CodeClubAssetsContext");
+}
+try
+{
+    msID = config["AUTH_MS_ID"];
+    if (msID == null || msID == "") throw new InvalidOperationException("no secrets file");
+}
+catch
+{
+    msID = builder.Configuration.GetValue<string>("AUTH_MS_ID");
+}
+try
+{
+    msSec = config["AUTH_MS_SECRET"];
+    if (msSec == null || msSec == "") throw new InvalidOperationException("no secrets file");
+}
+catch
+{
+    msID = builder.Configuration.GetValue<string>("AUTH_MS_SECRET");
 }
 
 
@@ -46,14 +66,15 @@ builder.Services.AddRazorPages(options =>
     options.Conventions.AuthorizeFolder("/Manage");
     options.Conventions.AuthorizePage("/Loan");
     options.Conventions.AuthorizePage("/Return");
+    options.Conventions.AuthorizePage("/View");
 });
 
 builder.Services.AddAuthentication().AddMicrosoftAccount(microsoftOptions =>
 {
     microsoftOptions.AuthorizationEndpoint = "https://login.microsoftonline.com/5eb26f0a-532d-45f6-b1b4-58c84e52a7c5/oauth2/v2.0/authorize";
     microsoftOptions.TokenEndpoint = "https://login.microsoftonline.com/5eb26f0a-532d-45f6-b1b4-58c84e52a7c5/oauth2/v2.0/token";
-    microsoftOptions.ClientId = config["AUTH_MS_ID"];
-    microsoftOptions.ClientSecret = config["AUTH_MS_SECRET"];
+    microsoftOptions.ClientId = msID;
+    microsoftOptions.ClientSecret = msSec;
 });
 
 var app = builder.Build();
