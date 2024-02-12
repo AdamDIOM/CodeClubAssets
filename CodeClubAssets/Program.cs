@@ -8,13 +8,24 @@ var builder = WebApplication.CreateBuilder(args);
 IConfiguration config = new ConfigurationBuilder()
     .AddUserSecrets<Program>()
     .Build();
+string dbConnStr = "";
+try
+{
+    dbConnStr = config["SECRET_DB"];
+    if (dbConnStr == null || dbConnStr == "") throw new InvalidOperationException("no secrets file");
+}
+catch
+{
+    dbConnStr = builder.Configuration.GetConnectionString("CodeClubAssetsContext");
+}
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Configuration.AddEnvironmentVariables();
 builder.Services.AddDbContext<CodeClubAssetsContext>(options =>
     //options.UseSqlServer(config["SECRET_DB"] ?? throw new InvalidOperationException("Connection string not found"))
-    options.UseSqlServer(builder.Configuration.GetConnectionString("CodeClubAssetsContext") ?? throw new InvalidOperationException("Connection string 'CodeClubAssetsContext' not found."))
+    //options.UseSqlServer(builder.Configuration.GetConnectionString("CodeClubAssetsContext") ?? throw new InvalidOperationException("Connection string 'CodeClubAssetsContext' not found."))
+    options.UseSqlServer(dbConnStr ?? throw new InvalidOperationException("Connection string not found"))
     );
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
@@ -31,6 +42,8 @@ builder.Services.ConfigureApplicationCookie(options =>
 builder.Services.AddRazorPages(options =>
 {
     options.Conventions.AuthorizeFolder("/Manage");
+    options.Conventions.AuthorizePage("/Loan");
+    options.Conventions.AuthorizePage("/Return");
 });
 
 var app = builder.Build();
