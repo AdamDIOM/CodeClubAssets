@@ -45,6 +45,24 @@ namespace CodeClubAssets.Pages.Management
             return Page();
         }
 
+        public void ChangeLocationToParents(List<Item> parents)
+        {
+            Item currentParent = parents.Last();
+            if (parents.Where(p => p == currentParent).Count() > 1) return;
+            foreach (var i in Items)
+            {
+                if (i == currentParent) continue;
+                if (i.ParentID == currentParent.ID && i.Location == originalLocation)
+                {
+                    i.Location = currentParent.Location;
+                    _context.Attach(i).State = EntityState.Modified;
+                    parents.Add(i);
+                    ChangeLocationToParents(parents);
+                    parents.Remove(i);
+                }
+            }
+        }
+
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
@@ -60,18 +78,12 @@ namespace CodeClubAssets.Pages.Management
             {
                 Items = await _context.Item.ToListAsync();
             }
+
+            
             
             if(Item != null && Item.Location != null && originalLocation != null && originalLocation != "")
             {
-                foreach (var i in Items)
-                {
-                    if (i == Item) continue;
-                    if(i.ParentID == Item.ID && i.Location == originalLocation)
-                    {
-                        i.Location = Item.Location;
-                        _context.Attach(i).State = EntityState.Modified;
-                    }
-                }
+                ChangeLocationToParents(new List<Item>() { Item });
             }
 
             try
