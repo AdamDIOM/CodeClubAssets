@@ -7,13 +7,17 @@
 
 <h1>View</h1>
 
-<form>@* method="post">*@
-        <div class="form-group">
-            <label asp-for="qry">Search</label>
-            <input asp-for="qry" />
-            <input type="submit" asp-route-qry="@Model.qry" value="Search" class="btn btn-success">
-        </div>
-    </form>
+<form method="post">
+    <div class="form-group">
+        <label asp-for="qry">Search</label>
+        <input asp-for="qry" />
+        <input type="submit" asp-route-qry="@Model.qry" asp-route-filter="@Model.filter" value="Search" class="btn btn-success">
+    </div>
+    <div class="form-group">
+        <input type="submit" asp-page-handler="FilterKWC" asp-route-qry="@Model.qry" asp-route-filter="@Model.filter" value="Filter to KWC" class="btn btn-success" />
+        <input type="submit" asp-page-handler="ClearFilter" asp-route-qry="@Model.qry" value="Clear filter" class="btn btn-success" />
+    </div>
+</form>
 
 <table class="table">
     <thead>

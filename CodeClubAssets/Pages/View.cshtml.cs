@@ -14,7 +14,9 @@ namespace CodeClubAssets.Pages
     {
         private readonly CodeClubAssets.Data.CodeClubAssetsContext _context;
         [BindProperty(SupportsGet = true)]
-        public string qry { get; set; }
+        public string? qry { get; set; }
+        [BindProperty(SupportsGet = true)]
+        public string? filter { get; set; }
         public ViewModel(CodeClubAssets.Data.CodeClubAssetsContext context)
         {
             _context = context;
@@ -37,6 +39,42 @@ namespace CodeClubAssets.Pages
                     ).ToList();
                 }
             }
+            if (filter == null) filter = "";
+            if(filter == "kwc")
+            {
+                Item = Item.Where(i =>
+                    i.Location[0] == 'T' || i.Location[0] == 'S'
+                ).ToList();
+            }
+        }
+
+        public IActionResult OnPost()
+        {
+            if(filter != null && filter != "")
+            {
+                return Redirect($"View/?qry={qry}&filter={filter}");
+            }
+            return Redirect($"View/?qry={qry}");
+        }
+
+        public IActionResult OnPostFilterKWC()
+        {
+            filter = "kwc";
+            if (qry != null && qry != "")
+            {
+                return Redirect($"View/?qry={qry}&filter={filter}");
+            }
+            return Redirect($"View/?filter={filter}");
+        }
+
+        public IActionResult OnPostClearFilter()
+        {
+            filter = "";
+            if (qry != null && qry != "")
+            {
+                return Redirect($"View/?qry={qry}");
+            }
+            return Redirect($"View");
         }
     }
 }
