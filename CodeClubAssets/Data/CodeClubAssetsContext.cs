@@ -26,7 +26,7 @@ namespace CodeClubAssets.Data
             modelBuilder.Entity<PATTest>().ToTable("PATTests");
             modelBuilder.Entity<Loans>().ToTable("OnLoan");
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Ignore<IdentityUserLogin<string>>();
+            //modelBuilder.Ignore<IdentityUserLogin<string>>();
         }
     }
 }

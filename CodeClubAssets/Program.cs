@@ -19,6 +19,8 @@ catch
     dbConnStr = builder.Configuration.GetConnectionString("CodeClubAssetsContext");
 }
 
+
+
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Configuration.AddEnvironmentVariables();
@@ -29,8 +31,8 @@ builder.Services.AddDbContext<CodeClubAssetsContext>(options =>
     );
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-    .AddEntityFrameworkStores<CodeClubAssetsContext>()
-    .AddDefaultTokenProviders();
+    .AddDefaultTokenProviders()
+    .AddEntityFrameworkStores<CodeClubAssetsContext>();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
@@ -44,6 +46,14 @@ builder.Services.AddRazorPages(options =>
     options.Conventions.AuthorizeFolder("/Manage");
     options.Conventions.AuthorizePage("/Loan");
     options.Conventions.AuthorizePage("/Return");
+});
+
+builder.Services.AddAuthentication().AddMicrosoftAccount(microsoftOptions =>
+{
+    microsoftOptions.AuthorizationEndpoint = "https://login.microsoftonline.com/5eb26f0a-532d-45f6-b1b4-58c84e52a7c5/oauth2/v2.0/authorize";
+    microsoftOptions.TokenEndpoint = "https://login.microsoftonline.com/5eb26f0a-532d-45f6-b1b4-58c84e52a7c5/oauth2/v2.0/token";
+    microsoftOptions.ClientId = config["AUTH_MS_ID"];
+    microsoftOptions.ClientSecret = config["AUTH_MS_SECRET"];
 });
 
 var app = builder.Build();
