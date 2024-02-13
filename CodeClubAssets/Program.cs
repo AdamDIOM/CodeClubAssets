@@ -36,7 +36,7 @@ try
 }
 catch
 {
-    msID = builder.Configuration.GetValue<string>("AUTH_MS_SECRET");
+    msSec = builder.Configuration.GetValue<string>("AUTH_MS_SECRET");
 }
 
 
